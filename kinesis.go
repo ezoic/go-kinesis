@@ -329,9 +329,10 @@ func (kinesis *Kinesis) GetShardIterator(args *RequestArgs) (resp *GetShardItera
 
 // GetNextRecordsRecords stores the information that provides by GetNextRecordsResp
 type GetRecordsRecords struct {
-	Data           []byte
-	PartitionKey   string
-	SequenceNumber string
+	ApproximateArrivalTimestamp int64
+	Data                        []byte
+	PartitionKey                string
+	SequenceNumber              string
 }
 
 func (r GetRecordsRecords) GetData() []byte {
@@ -340,8 +341,9 @@ func (r GetRecordsRecords) GetData() []byte {
 
 // GetNextRecordsResp stores the information that provides by GetNextRecords API call
 type GetRecordsResp struct {
-	NextShardIterator string
-	Records           []GetRecordsRecords
+	MillisBehindLatest int64
+	NextShardIterator  string
+	Records            []GetRecordsRecords
 }
 
 // GetRecords returns one or more data records from a shard
