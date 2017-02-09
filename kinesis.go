@@ -296,7 +296,7 @@ type DescribeStreamResp struct {
 
 // DescribeStreamAllShards returns the same information as DescribeStream, but also returns
 // all of the shards if hitting limits.
-func (kinesis *Kinesis) DescribeStreamFull(streamName string) (resp *DescribeStreamResp, err error) {
+func (kinesis *Kinesis) DescribeStreamAllShards(streamName string) (resp *DescribeStreamResp, err error) {
 
 	// describe the stream
 	args := NewArgs()
