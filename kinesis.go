@@ -45,6 +45,7 @@ type KinesisClient interface {
 	CreateStream(StreamName string, ShardCount int) error
 	DeleteStream(StreamName string) error
 	DescribeStream(args *RequestArgs) (resp *DescribeStreamResp, err error)
+	DescribeStreamAllShards(StreamName string) (resp *DescribeStreamResp, err error)
 	GetRecords(args *RequestArgs) (resp *GetRecordsResp, err error)
 	GetShardIterator(args *RequestArgs) (resp *GetShardIteratorResp, err error)
 	ListStreams(args *RequestArgs) (resp *ListStreamsResp, err error)
