@@ -294,6 +294,35 @@ type DescribeStreamResp struct {
 	}
 }
 
+// DescribeStreamAllShards returns the same information as DescribeStream, but also returns
+// all of the shards if hitting limits.
+func (kinesis *Kinesis) DescribeStreamFull(streamName string) (resp *DescribeStreamResp, err error) {
+
+	// describe the stream
+	args := NewArgs()
+	args.Add("StreamName", streamName)
+	resp, err = kinesis.DescribeStream(args)
+	if err != nil {
+		return nil, err
+	}
+
+	// if we have more shards, get more
+	hasMoreShards := resp.StreamDescription.HasMoreShards
+	for hasMoreShards {
+		args = NewArgs()
+		args.Add("StreamName", streamName)
+		args.Add("ExclusiveStartShardId", resp.StreamDescription.Shards[len(resp.StreamDescription.Shards)-1].ShardId)
+		resp2, err2 := kinesis.DescribeStream(args)
+		if err != nil {
+			return nil, err2
+		}
+		hasMoreShards = resp2.StreamDescription.HasMoreShards
+		resp.StreamDescription.Shards = append(resp.StreamDescription.Shards, resp2.StreamDescription.Shards...)
+	}
+
+	return resp, nil
+}
+
 // DescribeStream returns the following information about the stream: the current status of the stream,
 // the stream Amazon Resource Name (ARN), and an array of shard objects that comprise the stream.
 // For each shard object there is information about the hash key and sequence number ranges that
