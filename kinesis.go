@@ -314,7 +314,7 @@ func (kinesis *Kinesis) DescribeStreamAllShards(streamName string) (resp *Descri
 		args.Add("StreamName", streamName)
 		args.Add("ExclusiveStartShardId", resp.StreamDescription.Shards[len(resp.StreamDescription.Shards)-1].ShardId)
 		resp2, err2 := kinesis.DescribeStream(args)
-		if err != nil {
+		if err2 != nil {
 			return nil, err2
 		}
 		hasMoreShards = resp2.StreamDescription.HasMoreShards
